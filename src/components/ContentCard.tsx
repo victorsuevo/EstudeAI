@@ -69,9 +69,9 @@ const ContentCard: React.FC<ContentCardProps> = ({ content, onToggleComplete, on
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           <ExternalLink size={14} /> {content.source}
         </span>
-        {content.duration && (
+        {content.durationHours && (
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            <Clock size={14} /> {content.duration}
+            <Clock size={14} /> {content.durationHours}h
           </span>
         )}
       </div>
