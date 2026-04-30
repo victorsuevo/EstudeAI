@@ -1,9 +1,9 @@
 services:
   - type: web
     name: EstudeAI-victorsuevo
-    runtime: static
+    env: static
     buildCommand: npm install && npm run build
-    publishPath: dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_SUPABASE_URL
         sync: false
