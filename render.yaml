@@ -1,15 +1,11 @@
 services:
   - type: web
-    name: estude-ai
+    name: EstudeAI-victorsuevo
     runtime: static
-    buildCommand: npm run build
+    buildCommand: npm install && npm run build
     publishPath: dist
     envVars:
       - key: VITE_SUPABASE_URL
-        value: https://seu-projeto.supabase.co
+        sync: false
       - key: VITE_SUPABASE_ANON_KEY
-        value: sua-chave-anon-aqui
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache
+        sync: false
