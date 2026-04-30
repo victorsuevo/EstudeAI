@@ -1,0 +1,157 @@
+:root {
+  /* Cores Modernas (Tema Light Premium) */
+  --primary: #27ae60;      /* Verde Esmeralda Vibrante */
+  --secondary: #f1c40f;    /* Ouro Canário */
+  --accent-blue: #2980b9;  /* Azul Imperial */
+  --bg-main: #f8faff;      /* Branco Perolado Suave */
+  --bg-sidebar: #ffffff;   /* Fundo da Sidebar */
+  --bg-card: #ffffff;      /* Branco Puro */
+  --text-main: #2c3e50;    /* Azul Escuro Profundo (Texto) */
+  --text-muted: #7f8c8d;   /* Cinza Sofisticado */
+  --border: rgba(0, 0, 0, 0.05);
+  --glass: rgba(255, 255, 255, 0.7);
+  --success: #10b981;
+  --beginner: #2ecc71;
+  --intermediate: #f39c12;
+  --advanced: #e74c3c;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Outfit', 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Layout Estrutural */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-shadow: 2px 0 20px rgba(0,0,0,0.02);
+}
+
+.main-content {
+  flex: 1;
+  padding: 3rem 4rem;
+  max-width: 1400px;
+  margin-left: 280px; /* Compensa a sidebar fixa */
+}
+
+/* Componentes Premium */
+.premium-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-color: rgba(39, 174, 96, 0.2);
+}
+
+.glass-effect {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Botões e Interação */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #219150);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Typography & Effects */
+.gradient-text {
+  background: linear-gradient(95deg, var(--primary), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.difficulty-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.difficulty-Beginner { background: rgba(46, 204, 113, 0.1); color: var(--beginner); }
+.difficulty-Intermediate { background: rgba(243, 156, 18, 0.1); color: var(--intermediate); }
+.difficulty-Advanced { background: rgba(231, 76, 60, 0.1); color: var(--advanced); }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .sidebar { width: 80px; padding: 2rem 0.5rem; align-items: center; }
+  .sidebar span { display: none; }
+  .main-content { padding: 2rem; }
+}

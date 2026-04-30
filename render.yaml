@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: estude-ai
+    runtime: static
+    buildCommand: npm run build
+    publishPath: dist
+    envVars:
+      - key: VITE_SUPABASE_URL
+        value: https://seu-projeto.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        value: sua-chave-anon-aqui
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
