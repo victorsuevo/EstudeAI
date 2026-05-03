@@ -3,7 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import ContentCard from './components/ContentCard';
-import { Trash2, ChevronDown, ChevronUp, X, Clock } from 'lucide-react';
+import { Trash2, ChevronDown, ChevronUp, X, Clock, Menu } from 'lucide-react';
 
 import { searchContent } from './services/ContentService';
 import type { LearningPath, Content } from './services/ContentService';
@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<LearningPath[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [prefLanguage, setPrefLanguage] = useState<'PT' | 'EN' | 'FR'>('PT');
@@ -90,7 +91,27 @@ function App() {
 
   return (
     <div className="app-container">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <header className="mobile-header">
+        <button className="hamburger-btn" onClick={() => setIsDrawerOpen(true)}>
+          <Menu size={24} />
+        </button>
+        <div className="mobile-logo-container">
+          <img src="/logo.png" alt="EstudeAI" className="mobile-logo-img" />
+          <span className="mobile-logo-text gradient-text">EstudeAI</span>
+        </div>
+      </header>
+
+      <div 
+        className={`mobile-overlay ${isDrawerOpen ? 'visible' : ''}`} 
+        onClick={() => setIsDrawerOpen(false)}
+      />
+
+      <Sidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        isOpen={isDrawerOpen} 
+        onClose={() => setIsDrawerOpen(false)} 
+      />
       
       <main className="main-content">
         {activeTab === 'dashboard' && (

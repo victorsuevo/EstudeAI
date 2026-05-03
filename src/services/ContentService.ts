@@ -40,9 +40,9 @@ const translateQuery = (query: string, targetLang: 'PT' | 'EN' | 'FR'): string =
 
 const getTranslation = (key: string, lang: 'PT' | 'EN' | 'FR') => {
   const dict = {
-    'PT': { intro: 'Introdução a', whatIs: 'O que é', guide: 'Guia Prático:', projects: 'Projetos de', docs: 'Documentação Oficial de', research: 'Pesquisa e Futuro de', pathTitle: 'Trilha Especializada:', curDesc: 'Curadoria profunda realizada por IA sobre' },
-    'EN': { intro: 'Introduction to', whatIs: 'What is', guide: 'Practical Guide:', projects: 'Projects of', docs: 'Official Documentation of', research: 'Research and Future of', pathTitle: 'Specialized Path:', curDesc: 'Deep AI curation for' },
-    'FR': { intro: 'Introduction à', whatIs: 'Qu\'est-ce que', guide: 'Guide Pratique :', projects: 'Projets de', docs: 'Documentation Officielle de', research: 'Recherche et Futuro de', pathTitle: 'Parcours Spécialisé :', curDesc: 'Curation profonde par IA sur' }
+    'PT': { intro: 'Introdução a', whatIs: 'O que é', guide: 'Guia Prático:', projects: 'Projetos de', docs: 'Documentação Oficial de', academic: 'Artigos Acadêmicos:', research: 'Pesquisa e Futuro de', pathTitle: 'Trilha Especializada:', curDesc: 'Curadoria profunda realizada por IA sobre' },
+    'EN': { intro: 'Introduction to', whatIs: 'What is', guide: 'Practical Guide:', projects: 'Projects of', docs: 'Official Documentation of', academic: 'Academic Papers:', research: 'Research and Future of', pathTitle: 'Specialized Path:', curDesc: 'Deep AI curation for' },
+    'FR': { intro: 'Introduction à', whatIs: 'Qu\'est-ce que', guide: 'Guide Pratique :', projects: 'Projets de', docs: 'Documentation Officielle de', academic: 'Articles Académiques :', research: 'Recherche et Futuro de', pathTitle: 'Parcours Spécialisé :', curDesc: 'Curation profonde par IA sur' }
   };
   return dict[lang][key as keyof typeof dict['PT']] || key;
 };
@@ -53,6 +53,9 @@ const generateSmartUrl = (title: string, source: string, type: string, topic: st
   if (source.toLowerCase() === 'wikipedia') {
     const wikiLang = langCode === 'en' ? 'en' : langCode === 'fr' ? 'fr' : 'pt';
     return `https://${wikiLang}.wikipedia.org/wiki/${encodeURIComponent(topic)}`;
+  }
+  if (source === 'Google Scholar') {
+    return `https://scholar.google.com/scholar?q=${encodeURIComponent(topic)}&hl=${langCode}`;
   }
   if (type === 'Video') return `https://www.youtube.com/results?search_query=${query}`;
   return `https://www.google.com/search?q=${query}&hl=${langCode}`;
@@ -77,7 +80,8 @@ export const searchContent = async (query: string, language: 'PT' | 'EN' | 'FR' 
       { title: `${langFlag} ${t('intro')} ${topic}`, type: 'Video', diff: 'Beginner', src: 'YouTube' },
       { title: `${langFlag} ${t('whatIs')} ${topic}?`, type: 'Article', diff: 'Beginner', src: 'Wikipedia' },
       { title: `${langFlag} ${t('guide')} ${topic}`, type: 'Course', diff: 'Intermediate', src: 'GitHub' },
-      { title: `${langFlag} ${t('docs')} ${topic}`, type: 'Article', diff: 'Advanced', src: 'Official' }
+      { title: `${langFlag} ${t('docs')} ${topic}`, type: 'Article', diff: 'Advanced', src: 'Official' },
+      { title: `${langFlag} ${t('academic')} ${topic}`, type: 'Academic', diff: 'Advanced', src: 'Google Scholar' }
     ];
 
     items.forEach((item, idx) => {

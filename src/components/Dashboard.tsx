@@ -1,16 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Sparkles, TrendingUp, BookOpen, Clock, Award, Check, X } from 'lucide-react';
+import { Search, TrendingUp, BookOpen, Clock, Award, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { searchContent } from '../services/ContentService';
 import type { LearningPath, Content } from '../services/ContentService';
 import ContentCard from './ContentCard';
-
-export interface UserStats {
-  completedPaths: number;
-  totalHours: number;
-  activePaths: number;
-  streak: number;
-}
 
 interface DashboardProps {
   results: LearningPath[];
@@ -45,9 +38,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const [isSearching, setIsSearching] = useState(false);
 
-  // Computação Real das Estatísticas
   const stats = useMemo(() => {
-    // ... logic remains same
     const allKnownContents = [
       ...results.flatMap(p => p.contents),
       ...savedPaths.flatMap(p => p.contents),
@@ -91,58 +82,34 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-      {/* Header & Search */}
       <section style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-        {isGlobalSearch && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              background: 'rgba(16, 185, 129, 0.1)', 
-              color: 'var(--success)', 
-              padding: '0.5rem 1rem', 
-              borderRadius: '100px',
-              fontSize: '0.85rem',
-              fontWeight: '800',
-              marginBottom: '1rem',
-              border: '1px solid var(--success)'
-            }}
-          >
-            <Sparkles size={16} />
-            MODO BUSCA GLOBAL ATIVADO (PT + EN + FR)
-          </motion.div>
-        )}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <h2 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-0.03em' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
             O que você quer <span className="gradient-text">aprender</span> hoje?
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', marginBottom: '2.5rem' }}>
-            Encontre o caminho perfeito com IA, explorando o melhor conteúdo gratuito da internet.
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '2.5rem' }}>
+            Explore o melhor conteúdo gratuito da internet em uma jornada estruturada pela IA.
           </p>
         </motion.div>
 
         <form onSubmit={handleSearch} style={{ position: 'relative' }}>
-          <div className="glass-effect" style={{
+          <div style={{
             display: 'flex',
             alignItems: 'center',
-            padding: '0.5rem 0.5rem 0.5rem 1.5rem',
-            borderRadius: '20px',
-            boxShadow: '0 15px 35px rgba(0,0,0,0.05)',
-            transition: 'var(--transition)',
+            padding: '0.5rem 0.5rem 0.5rem 1.25rem',
+            borderRadius: '16px',
             border: '1px solid var(--border)',
-            background: 'var(--bg-card)'
+            background: 'white',
+            boxShadow: 'var(--shadow-md)',
+            transition: 'var(--transition)'
           }}>
-            <Search size={24} color="var(--primary)" />
+            <Search size={20} color="var(--primary)" />
             <input
               type="text"
-              placeholder="Ex: Python, Anatomia, Design UI/UX..."
+              placeholder="Ex: Python, Design UI/UX, Anatomia..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -150,8 +117,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                 background: 'none',
                 border: 'none',
                 color: 'var(--text-main)',
-                padding: '1rem',
-                fontSize: '1.1rem',
+                padding: '0.8rem 1rem',
+                fontSize: '1rem',
                 outline: 'none'
               }}
             />
@@ -159,124 +126,104 @@ const Dashboard: React.FC<DashboardProps> = ({
               <button 
                 type="button"
                 onClick={clearSearch}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  padding: '0.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginRight: '0.5rem'
-                }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem' }}
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             )}
             <button 
               type="submit" 
               className="btn-primary" 
               disabled={isSearching}
-              style={{ padding: '1rem 2rem' }}
+              style={{ padding: '0.8rem 1.5rem' }}
             >
-              {isSearching ? 'Curando...' : 'Buscar'}
-              {!isSearching && <Sparkles size={18} />}
+              {isSearching ? 'Buscando...' : 'Buscar'}
             </button>
           </div>
         </form>
       </section>
 
-      {/* Stats Quick View */}
       {!results.length && (
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-          <StatCard icon={<TrendingUp color="var(--primary)" />} label="Duração Total" value={`${stats.totalHours}h`} />
-          <StatCard icon={<BookOpen color="#3b82f6" />} label="Trilhas Ativas" value={stats.activePaths} />
-          <StatCard icon={<Award color="#ec4899" />} label="Trilhas Concluídas" value={stats.completedPaths} />
-          <StatCard icon={<Clock color="#10b981" />} label="Ofensiva (Dias)" value={stats.streak} />
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem' }}>
+          <StatCard icon={<TrendingUp size={20} color="var(--primary)" />} label="Duração" value={`${stats.totalHours}h`} />
+          <StatCard icon={<BookOpen size={20} color="var(--accent)" />} label="Ativas" value={stats.activePaths} />
+          <StatCard icon={<Award size={20} color="var(--secondary)" />} label="Concluídas" value={stats.completedPaths} />
+          <StatCard icon={<Clock size={20} color="var(--beginner)" />} label="Ofensiva" value={stats.streak} />
         </section>
       )}
 
-      {/* Search Results */}
       {results.length > 0 && (
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}
         >
           {results.map((path) => (
             <div key={path.id}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                  <h3 style={{ fontSize: '1.75rem', fontWeight: '800' }}>{path.title}</h3>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: '800' }}>{path.title}</h3>
                   <p style={{ color: 'var(--text-muted)' }}>{path.description}</p>
                 </div>
                 <button 
                   onClick={() => onSavePath(path)}
                   disabled={isPathSaved(path.id)}
                   className="btn-primary" 
-                  style={{ 
-                    background: isPathSaved(path.id) ? 'var(--bg-main)' : 'var(--primary)', 
-                    color: isPathSaved(path.id) ? 'var(--text-muted)' : 'white', 
-                    border: '1px solid var(--border)' 
-                  }}
+                  style={{ background: isPathSaved(path.id) ? '#f1f5f9' : undefined, color: isPathSaved(path.id) ? 'var(--text-muted)' : 'white' }}
                 >
-                  {isPathSaved(path.id) ? (
-                    <>Salvo <Check size={16} /></>
-                  ) : 'Salvar Trilha Completa'}
+                  {isPathSaved(path.id) ? <>Salvo <Check size={16} /></> : 'Salvar Trilha'}
                 </button>
               </div>
 
-              {/* Learning Levels Sections */}
-              {['Beginner', 'Intermediate', 'Advanced'].map((level) => {
-                const filteredContent = path.contents.filter(c => c.difficulty === level);
-                if (filteredContent.length === 0) return null;
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                {['Beginner', 'Intermediate', 'Advanced'].map((level) => {
+                  const filteredContent = path.contents.filter(c => c.difficulty === level);
+                  if (filteredContent.length === 0) return null;
 
-                return (
-                  <div key={level} style={{ marginBottom: '2.5rem' }}>
-                    <h4 style={{ 
-                      fontSize: '1rem', 
-                      fontWeight: '800', 
-                      color: `var(--${level.toLowerCase()})`, 
-                      marginBottom: '1rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem'
-                    }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: `var(--${level.toLowerCase()})` }} />
-                      Nível {level === 'Beginner' ? 'Iniciante' : level === 'Intermediate' ? 'Intermediário' : 'Avançado'}
-                    </h4>
-                    <div style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-                      gap: '1.5rem' 
-                    }}>
-                      {filteredContent.map((content) => (
-                        <ContentCard 
-                          key={content.id} 
-                          content={{
-                            ...content,
-                            isFavorite: savedItems.some(i => i.id === content.id),
-                            completed: completedItems.includes(content.id)
-                          }} 
-                          onToggleFavorite={() => onToggleFavorite(content)}
-                          onToggleComplete={() => onToggleComplete(content.id)}
-                        />
-                      ))}
+                  return (
+                    <div key={level}>
+                      <h4 style={{ 
+                        fontSize: '0.8rem', 
+                        fontWeight: '800', 
+                        color: `var(--${level.toLowerCase()})`, 
+                        marginBottom: '1rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}>
+                        Nível {level === 'Beginner' ? 'Iniciante' : level === 'Intermediate' ? 'Intermediário' : 'Avançado'}
+                      </h4>
+                      <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+                        gap: '1.5rem' 
+                      }}>
+                        {filteredContent.map((content) => (
+                          <ContentCard 
+                            key={content.id} 
+                            content={{
+                              ...content,
+                              isFavorite: savedItems.some(i => i.id === content.id),
+                              completed: completedItems.includes(content.id)
+                            }} 
+                            onToggleFavorite={() => onToggleFavorite(content)}
+                            onToggleComplete={() => onToggleComplete(content.id)}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           ))}
         </motion.section>
       )}
 
-      {/* Recommended Topics */}
       {!results.length && (
         <section>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>Sugestões para você</h3>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            {['React Native', 'Machine Learning', 'UX Design', 'Francês para Viagem', 'Cálculo I', 'Gestão de Projetos'].map(topic => (
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>Sugestões em alta</h3>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            {['React Native', 'IA Generativa', 'UX Design', 'Francês', 'Data Science'].map(topic => (
               <button 
                 key={topic}
                 onClick={async () => { 
@@ -290,18 +237,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                     setIsSearching(false);
                   }
                 }}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '12px',
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border)',
-                  color: 'var(--text-main)',
-                  cursor: 'pointer',
-                  transition: 'var(--transition)',
-                  boxShadow: 'var(--shadow)'
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--primary)')}
-                onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
+                className="btn-secondary"
+                style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem' }}
               >
                 {topic}
               </button>
@@ -315,11 +252,11 @@ const Dashboard: React.FC<DashboardProps> = ({
 
 const StatCard = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string | number }) => (
   <div className="premium-card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-    <div style={{ background: 'rgba(39, 174, 96, 0.05)', padding: '0.75rem', borderRadius: '12px' }}>
+    <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '12px' }}>
       {icon}
     </div>
     <div>
-      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase' }}>{label}</p>
+      <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '700', textTransform: 'uppercase' }}>{label}</p>
       <p style={{ fontSize: '1.25rem', fontWeight: '800' }}>{value}</p>
     </div>
   </div>

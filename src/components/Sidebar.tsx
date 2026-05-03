@@ -1,53 +1,70 @@
 import React from 'react';
-import { Home, Library, Compass, History, BookOpen, Settings, ChevronRight } from 'lucide-react';
+import { Home, Compass, BookOpen, History, Settings, X, ChevronRight } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  onTabChange: (tab: string) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isOpen, onClose }) => {
   const menuItems = [
     { id: 'dashboard', icon: Home, label: 'Início' },
     { id: 'discover', icon: Compass, label: 'Descobrir' },
     { id: 'paths', icon: BookOpen, label: 'Minhas Trilhas' },
-    { id: 'library', icon: Library, label: 'Biblioteca' },
     { id: 'history', icon: History, label: 'Histórico' },
   ];
 
+  const handleTabClick = (id: string) => {
+    onTabChange(id);
+    if (window.innerWidth <= 1024) {
+      onClose();
+    }
+  };
+
   return (
-    <aside style={{
-      width: '280px',
-      height: '100vh',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      backgroundColor: 'var(--bg-sidebar)',
-      borderRight: '1px solid var(--border)',
-      padding: '2rem 1.5rem',
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 1000
-    }}>
-      <div style={{ marginBottom: '4rem' }}>
-        <h1 className="gradient-text" style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.025em' }}>
-          EstudeAI
-        </h1>
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>
-          BY SUEVO
-        </p>
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <img 
+            src="/logo.png" 
+            alt="EstudeAI Logo" 
+            style={{ width: '40px', height: '40px', borderRadius: '10px' }} 
+          />
+          <div>
+            <h1 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: '800', lineHeight: 1 }}>
+              EstudeAI
+            </h1>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '0.05em' }}>
+              BY SUEVO
+            </p>
+          </div>
+        </div>
+        <button 
+          onClick={onClose} 
+          style={{ 
+            display: window.innerWidth <= 1024 ? 'flex' : 'none', 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer',
+            color: 'var(--text-muted)'
+          }}
+        >
+          <X size={20} />
+        </button>
       </div>
 
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
         {menuItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => handleTabClick(item.id)}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              padding: '0.875rem 1rem',
+              gap: '0.75rem',
+              padding: '0.8rem 1rem',
               borderRadius: '12px',
               border: 'none',
               background: activeTab === item.id ? 'var(--primary)' : 'transparent',
@@ -56,35 +73,35 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
               transition: 'var(--transition)',
               width: '100%',
               textAlign: 'left',
-              fontWeight: activeTab === item.id ? '600' : '500'
+              fontWeight: activeTab === item.id ? '700' : '500'
             }}
           >
-            <item.icon size={20} />
-            {item.label}
-            {activeTab === item.id && <ChevronRight size={16} style={{ marginLeft: 'auto' }} />}
+            <item.icon size={18} />
+            <span style={{ fontSize: '0.9rem' }}>{item.label}</span>
+            {activeTab === item.id && <ChevronRight size={14} style={{ marginLeft: 'auto' }} />}
           </button>
         ))}
       </nav>
 
-      <div style={{ marginTop: 'auto', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
+      <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--border)' }}>
         <button 
-          onClick={() => setActiveTab('settings')}
+          onClick={() => handleTabClick('settings')}
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '1rem',
-            padding: '0.875rem 1rem',
+            gap: '0.75rem',
+            padding: '0.8rem 1rem',
             borderRadius: '12px',
-            border: 'none',
-            background: activeTab === 'settings' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'settings' ? 'white' : 'var(--text-muted)',
+            border: '1px solid var(--border)',
+            background: activeTab === 'settings' ? 'var(--primary)' : 'white',
+            color: activeTab === 'settings' ? 'white' : 'var(--text-main)',
             cursor: 'pointer',
             width: '100%',
-            fontWeight: '500',
+            fontWeight: '600',
             transition: 'var(--transition)'
           }}
         >
-          <Settings size={20} />
+          <Settings size={18} />
           Configurações
         </button>
       </div>
